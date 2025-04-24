@@ -20,4 +20,10 @@ export class UserService {
     this.rabbitClient.emit('user_created', savedUser); // Send event to RabbitMQ
     return savedUser;
   }
+
+  async findAll() {
+    const returnedUsers = await this.userRepo.find();
+    this.rabbitClient.emit('users_returned', returnedUsers);
+    return returnedUsers;
+  }
 }

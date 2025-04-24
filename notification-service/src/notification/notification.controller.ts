@@ -18,9 +18,14 @@ export class NotificationController {
 
   @EventPattern('user_created')
   handleUserCreated(data: any) {
-    console.log('User created event received:', data);
     // Handle the user created event here
     this.notificationService.printEvent(data);
+  }
+
+  @EventPattern('users_returned')
+  handleUserReturned(data: any) {
+    // Handle the user created event here
+    this.notificationService.printReturnEvent(data);
   }
   // @Post()
   // create(@Body() createNotificationDto: CreateNotificationDto) {

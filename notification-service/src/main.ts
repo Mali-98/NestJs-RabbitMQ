@@ -16,8 +16,5 @@ async function bootstrap() {
   );
 
   await app.listen(); // No HTTP port here — this is a microservice only
-  console.log(
-    '🚀 Notification microservice is listening for messages from RabbitMQ...',
-  );
 }
 bootstrap();
