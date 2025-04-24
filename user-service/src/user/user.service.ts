@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
@@ -13,20 +13,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class UserService {
   private client: ClientProxy;
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {
-    this.client = ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'user_queue',
-        queueOptions: { durable: false },
-      },
-    });
-  }
+  constructor(@Inject("USER_SERVICE") private rabbitClient: ClientProxy, @InjectRepository(User) private userRepo: Repository<User>) { }
   async createUser(createUserDto: CreateUserDto) {
     const user = this.userRepo.create(createUserDto); // Use DTO here
     const savedUser = await this.userRepo.save(user);
-    this.client.emit('user_created', savedUser); // Send event to RabbitMQ
+    this.rabbitClient.emit('user_created', savedUser); // Send event to RabbitMQ
     return savedUser;
   }
 }

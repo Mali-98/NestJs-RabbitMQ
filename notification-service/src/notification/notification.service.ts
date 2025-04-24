@@ -8,7 +8,7 @@ export class NotificationService {
   }
 
   @EventPattern('user_created')
-  handleUserCreatedEvent(@Payload() data: any) {
+  printEvent(@Payload() data: any) {
     console.log('📥 Received user_created event:', data);
     console.log(`📢 Sending notification to ${data.email}...`);
   }

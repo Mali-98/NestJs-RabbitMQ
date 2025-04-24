@@ -10,11 +10,18 @@ import {
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { EventPattern } from '@nestjs/microservices';
 
 @Controller('notification')
 export class NotificationController {
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(private readonly notificationService: NotificationService) { }
 
+  @EventPattern('user_created')
+  handleUserCreated(data: any) {
+    console.log('User created event received:', data);
+    // Handle the user created event here
+    this.notificationService.printEvent(data);
+  }
   // @Post()
   // create(@Body() createNotificationDto: CreateNotificationDto) {
   //   return this.notificationService.create(createNotificationDto);
