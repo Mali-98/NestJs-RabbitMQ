@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { UpdateNotificationDto } from './dto/update-notification.dto';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 
 @Injectable()
 export class NotificationService {
-  @MessagePattern('user_created') // Listen to "user_created" event from RabbitMQ
-  async handleUserCreatedEvent(data: any) {
-    console.log('Received user_created event:', data);
-    // You can send an email, push notification, etc.
-    // For now, just log it as a placeholder
-    console.log(`Sending notification to ${data.email}...`);
+  constructor() {
+    console.log('🚨 NotificationService initialized'); // Make sure this appears
+  }
+
+  @EventPattern('user_created')
+  handleUserCreatedEvent(@Payload() data: any) {
+    console.log('📥 Received user_created event:', data);
+    console.log(`📢 Sending notification to ${data.email}...`);
   }
 }
